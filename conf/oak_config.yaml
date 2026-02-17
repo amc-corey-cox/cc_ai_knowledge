@@ -1,0 +1,6 @@
+## OAK (Ontology Access Kit) configuration
+## Used by linkml-term-validator to resolve ontology terms
+
+ontology_adapters:
+  # Artificial Intelligence Ontology - local OBO file
+  aio: simpleobo:conf/aio.obo

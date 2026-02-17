@@ -170,28 +170,26 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "linkml" },
+    { name = "linkml-term-validator" },
+    { name = "oaklib" },
     { name = "pyyaml" },
 ]
 
 [package.dev-dependencies]
 validators = [
     { name = "linkml-reference-validator" },
-    { name = "linkml-term-validator" },
-    { name = "oaklib" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "linkml", specifier = ">=1.9" },
+    { name = "linkml-term-validator", specifier = ">=0.2" },
+    { name = "oaklib", specifier = ">=0.6" },
     { name = "pyyaml", specifier = ">=6.0" },
 ]
 
 [package.metadata.requires-dev]
-validators = [
-    { name = "linkml-reference-validator", specifier = ">=0.1" },
-    { name = "linkml-term-validator", specifier = ">=0.2" },
-    { name = "oaklib", specifier = ">=0.6" },
-]
+validators = [{ name = "linkml-reference-validator", specifier = ">=0.1" }]
 
 [[package]]
 name = "certifi"
