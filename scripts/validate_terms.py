@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate topic terms against ontologies (AIO, PROV-O).
+"""Validate topic terms against configured ontologies (currently AIO).
 
 Uses linkml-term-validator to check that ontology-backed topic terms
 in the schema have valid meanings (CURIEs exist in their ontologies).
@@ -25,6 +25,10 @@ def main() -> int:
     # Use the linkml-term-validator from the same venv as this Python
     venv_bin = Path(sys.executable).parent
     validator_bin = venv_bin / "linkml-term-validator"
+
+    if not validator_bin.exists():
+        print("Error: linkml-term-validator not found. Run 'uv sync' first.")
+        return 1
 
     cmd = [
         str(validator_bin),

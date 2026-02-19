@@ -175,7 +175,7 @@ classes:
       topics:
         description: >-
           Topic tags from the controlled TopicTerm vocabulary.
-          Terms are backed by AIO/PROV-O where possible.
+          Terms are backed by AIO where possible.
         range: TopicTerm
         multivalued: true
         required: true

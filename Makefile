@@ -6,7 +6,7 @@ OAK_CONF := conf/oak_config.yaml
 
 help:
 	@echo "validate          Validate all entries against LinkML schema (structure)"
-	@echo "validate-terms    Validate topic terms against ontologies (AIO, PROV-O)"
+	@echo "validate-terms    Validate topic terms against ontologies (AIO)"
 	@echo "validate-all      Run all validators (structure + terms)"
 	@echo "validate-file F=  Validate a specific file (structure only)"
 	@echo "gen-json-schema   Generate JSON Schema from LinkML (for editor support)"

@@ -3,4 +3,5 @@
 
 ontology_adapters:
   # Artificial Intelligence Ontology - local OBO file
+  # Source: https://github.com/berkeleybop/artificial-intelligence-ontology/releases
   aio: simpleobo:conf/aio.obo
