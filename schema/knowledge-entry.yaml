@@ -1,0 +1,228 @@
+id: https://w3id.org/cc-ai-knowledge
+name: cc-ai-knowledge
+title: CC AI Knowledge Base Schema
+description: >-
+  LinkML schema for knowledge base entries with provenance tracking.
+  Based on the provenance design in PROVENANCE.md, adapted from C2PA
+  and dismech patterns.
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  cc_ai: https://w3id.org/cc-ai-knowledge/
+
+imports:
+  - linkml:types
+
+default_range: string
+
+
+enums:
+  CurationType:
+    description: How the content was created and curated
+    permissible_values:
+      human_curated:
+        description: Human found, read, and summarized
+      ai_assisted:
+        description: Human directed AI to summarize, human verified
+      ai_generated:
+        description: AI found and summarized, human approved
+      ai_unverified:
+        description: AI generated, not yet human verified
+
+  ConfidenceLevel:
+    description: Confidence in the accuracy of the entry
+    permissible_values:
+      high:
+        description: Well-sourced, verified claims
+      medium:
+        description: Reasonably sourced, some uncertainty
+      low:
+        description: Limited sources or contested claims
+      uncertain:
+        description: Speculative or poorly sourced
+
+  SourceType:
+    description: Trust tier of the source (see PROVENANCE.md)
+    permissible_values:
+      primary:
+        description: "Tier 1: peer-reviewed papers, official docs, original announcements"
+      secondary:
+        description: "Tier 2: reputable journalism, expert blogs, curated databases"
+      tertiary:
+        description: "Tier 3: Wikipedia, Stack Overflow, community posts"
+
+  VerifiedByType:
+    description: What performed the verification
+    permissible_values:
+      human:
+        description: Human reviewed and verified
+      automated:
+        description: Automated verification pipeline
+      unverified:
+        description: Not yet verified
+
+
+classes:
+  KnowledgeEntry:
+    tree_root: true
+    description: >-
+      A knowledge base article with full provenance tracking.
+      Corresponds to the YAML frontmatter in a Markdown knowledge entry.
+    attributes:
+      id:
+        description: Unique identifier for this entry (format kb-YYYY-NNN)
+        required: true
+        pattern: "^kb-\\d{4}-\\d{3}$"
+
+      title:
+        description: Human-readable title of the entry
+        required: true
+
+      created:
+        description: Date the entry was first created
+        range: date
+        required: true
+
+      updated:
+        description: Date the entry was last updated
+        range: date
+        required: true
+
+      author:
+        description: >-
+          Who created this entry. "human" for human authors,
+          "agent:<agent-id>" for AI agents.
+        required: true
+
+      curation_type:
+        description: How this content was created and curated
+        range: CurationType
+        required: true
+
+      sources:
+        description: Source citations with provenance information
+        range: Source
+        multivalued: true
+        inlined_as_list: true
+        required: true
+
+      topics:
+        description: >-
+          Topic tags for this entry. Currently free-form strings.
+          Future: validated against AIO (see issue #7).
+        multivalued: true
+        required: true
+
+      confidence:
+        description: Confidence level in the accuracy of this entry
+        range: ConfidenceLevel
+        required: true
+
+      verified:
+        description: Whether the content has been verified
+        range: boolean
+        required: true
+
+      verified_by:
+        description: What performed the verification
+        range: VerifiedByType
+
+      verification_date:
+        description: When verification was performed
+        range: date
+
+      verification_notes:
+        description: Notes about the verification process
+
+      ai_metadata:
+        description: Metadata about AI involvement in content creation
+        range: AIMetadata
+        inlined: true
+
+
+  Source:
+    description: A cited source with provenance information
+    attributes:
+      id:
+        description: Source identifier within this entry (format src-NNN)
+        required: true
+        pattern: "^src-\\d{3}$"
+
+      type:
+        description: Trust tier of this source
+        range: SourceType
+        required: true
+
+      title:
+        description: Title of the source document
+        required: true
+
+      authors:
+        description: Author names
+        multivalued: true
+
+      url:
+        description: URL to the source
+        required: true
+        range: uri
+        implements:
+          - linkml:authoritative_reference
+
+      accessed:
+        description: Date the source was accessed
+        range: date
+        required: true
+
+      published:
+        description: Publication date of the source
+        range: date
+
+      arxiv:
+        description: arXiv identifier (e.g. "2404.03044")
+
+      quotes:
+        description: Exact quotes from this source
+        range: Quote
+        multivalued: true
+        inlined_as_list: true
+
+
+  Quote:
+    description: An exact quote from a source document
+    attributes:
+      text:
+        description: The exact quoted text
+        required: true
+        implements:
+          - linkml:excerpt
+
+      location:
+        description: Where in the source the quote appears (section, page, etc.)
+        required: true
+
+
+  AIMetadata:
+    description: Metadata about AI involvement in content creation
+    attributes:
+      model:
+        description: The AI model used (e.g. "claude-opus-4-6")
+        required: true
+
+      generation_date:
+        description: When the AI generated the content
+        range: date
+        required: true
+
+      prompt_hash:
+        description: Hash of the prompt used for reproducibility
+
+      confidence_score:
+        description: Model-reported confidence if available
+        range: float
+
+      reviewed_by:
+        description: Who reviewed the AI output ("human", "pending", or agent ID)
+
+      review_date:
+        description: When the review was performed
+        range: date
