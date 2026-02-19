@@ -126,6 +126,32 @@ enums:
       # --- Local terms: agent-specific ---
       architectures:
         description: Agent architecture patterns (alias for architecture in agent context)
+      # --- Local terms: agentic coding and Claude Code ---
+      agentic-coding:
+        description: AI-assisted software development using agentic coding tools
+      coding-agents:
+        description: Autonomous or semi-autonomous AI coding assistants
+      context-management:
+        description: Managing context windows, compaction, and token efficiency
+      agent-configuration:
+        description: Configuring agent behavior via instruction files and settings
+      prompt-engineering:
+        description: Techniques for crafting effective prompts for LLMs
+      # --- Local terms: protocols and interoperability ---
+      mcp:
+        description: Model Context Protocol for tool/resource integration
+      protocols:
+        description: Interoperability protocols for AI systems
+      # --- Local terms: model capabilities ---
+      model-families:
+        description: LLM model families, tiers, and selection guidance
+      extended-thinking:
+        description: Extended thinking, reasoning tokens, and budget control
+      # --- Local terms: agent collaboration ---
+      delegation:
+        description: Task delegation and sub-agent orchestration patterns
+      human-in-the-loop:
+        description: Human oversight, permission models, and approval workflows
 
 
 classes:

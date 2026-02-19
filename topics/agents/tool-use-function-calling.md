@@ -219,3 +219,6 @@ This standardizes the "plumbing" of tool use so developers can focus on building
 - [Berkeley Function-Calling Leaderboard](https://gorilla.cs.berkeley.edu/leaderboard.html) [src-005]
 - [LLM Agent Architectures](agent-architectures.md) - How tool use fits into agent patterns
 - [Multi-Agent Systems](multi-agent-systems.md) - Tools shared across agents
+- [Model Context Protocol](../protocols/model-context-protocol.md) - Standardized tool integration via MCP
+- [MCP Server Development](../protocols/mcp-server-development.md) - Building MCP tool servers
+- [Claude Code Architecture](../agentic-coding/claude-code-architecture.md) - Tool use in a production coding agent

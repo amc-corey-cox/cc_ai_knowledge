@@ -238,3 +238,7 @@ Each agent step is an LLM call. A 10-step agent trajectory costs 10x a single ca
 - [Agent Survey](https://arxiv.org/abs/2308.11432) - Comprehensive overview [src-003]
 - [Tool Use and Function Calling](tool-use-function-calling.md) - How agents interact with the world
 - [Multi-Agent Systems](multi-agent-systems.md) - When one agent isn't enough
+- [Sub-Agent Delegation](sub-agent-delegation.md) - Context isolation and task decomposition
+- [Human-in-the-Loop Patterns](human-in-the-loop.md) - Permission models and oversight
+- [Claude Code Architecture](../agentic-coding/claude-code-architecture.md) - A production agentic coding system
+- [Agentic Coding Patterns](../agentic-coding/agentic-coding-patterns.md) - Agent patterns applied to software development
