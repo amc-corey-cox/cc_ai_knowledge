@@ -9,6 +9,7 @@ description: >-
 prefixes:
   linkml: https://w3id.org/linkml/
   cc_ai: https://w3id.org/cc-ai-knowledge/
+  aio: https://w3id.org/aio/
 
 imports:
   - linkml:types
@@ -61,6 +62,71 @@ enums:
       unverified:
         description: Not yet verified
 
+  TopicTerm:
+    description: >-
+      Controlled vocabulary for knowledge entry topics. Terms are mapped
+      to external ontologies where possible (AIO, PROV-O) and defined
+      locally otherwise. See issue #10 for planned CSO integration.
+    permissible_values:
+      # --- AIO-backed terms (Artificial Intelligence Ontology) ---
+      transformers:
+        title: Transformer Network
+        description: Transformer neural network architecture
+        meaning: aio:TransformerNetwork
+      attention:
+        title: Attention Layer
+        description: Attention mechanism / attention layers
+        meaning: aio:AttentionLayer
+      architecture:
+        title: Network
+        description: Neural network architecture (general)
+        meaning: aio:Network
+      # --- Local terms: AI/ML concepts (future CSO candidates, see #10) ---
+      provenance:
+        description: Data provenance and attribution tracking
+      agents:
+        description: AI agent architectures and patterns
+      multi-agent:
+        description: Multi-agent systems and coordination
+      coordination:
+        description: Multi-agent coordination strategies
+      tool-use:
+        description: LLM tool calling and function invocation patterns
+      function-calling:
+        description: LLM API function calling mechanisms
+      reasoning:
+        description: LLM reasoning patterns (CoT, ToT, etc.)
+      quantization:
+        description: Model weight quantization and compression
+      local-inference:
+        description: Running models on local/consumer hardware
+      inference-engines:
+        description: Software for running model inference
+      serving:
+        description: Model serving and deployment infrastructure
+      hardware:
+        description: GPU, CPU, and compute hardware for ML
+      optimization:
+        description: Training and inference optimization techniques
+      model-variants:
+        description: Model architecture variants and adaptations
+      # --- Local terms: metadata and standards ---
+      standards:
+        description: Technical standards and specifications
+      model-metadata:
+        description: Model documentation and metadata schemas
+      ontology:
+        description: Ontologies and formal knowledge representation
+      content-authenticity:
+        description: Content provenance and authenticity (C2PA)
+      ai-disclosure:
+        description: AI content labeling and disclosure
+      ai-fundamentals:
+        description: Foundational AI/ML concepts (organizational tag)
+      # --- Local terms: agent-specific ---
+      architectures:
+        description: Agent architecture patterns (alias for architecture in agent context)
+
 
 classes:
   KnowledgeEntry:
@@ -108,8 +174,9 @@ classes:
 
       topics:
         description: >-
-          Topic tags for this entry. Currently free-form strings.
-          Future: validated against AIO (see issue #7).
+          Topic tags from the controlled TopicTerm vocabulary.
+          Terms are backed by AIO where possible.
+        range: TopicTerm
         multivalued: true
         required: true
 

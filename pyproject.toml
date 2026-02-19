@@ -7,13 +7,13 @@ license = "Apache-2.0"
 
 dependencies = [
     "linkml>=1.9",
+    "linkml-term-validator>=0.2",
+    "oaklib>=0.6",
     "pyyaml>=6.0",
 ]
 
 [dependency-groups]
-# Future validators (issues #7 and #8)
+# Future validators (issue #8)
 validators = [
-    "linkml-term-validator>=0.2",
     "linkml-reference-validator>=0.1",
-    "oaklib>=0.6",
 ]
