@@ -39,8 +39,16 @@ def extract_frontmatter(filepath: Path) -> dict | None:
     text = filepath.read_text(encoding="utf-8")
     if not text.startswith("---"):
         return None
-    end = text.index("---", 3)
-    data = yaml.safe_load(text[3:end])
+    try:
+        end = text.index("---", 3)
+    except ValueError:
+        print(f"WARNING {filepath}: missing closing '---' for YAML frontmatter")
+        return None
+    try:
+        data = yaml.safe_load(text[3:end])
+    except yaml.YAMLError as exc:
+        print(f"WARNING {filepath}: invalid YAML frontmatter: {exc}")
+        return None
     # Round-trip through JSON to convert datetime.date → string
     return json.loads(json.dumps(data, default=_serialize_dates))
 
@@ -69,15 +77,18 @@ def main() -> int:
 
     total = 0
     failed = 0
+    skipped = 0
 
     for filepath in entries:
-        total += 1
         rel_path = filepath.relative_to(REPO_ROOT)
         frontmatter = extract_frontmatter(filepath)
 
         if frontmatter is None:
+            skipped += 1
             print(f"SKIP {rel_path}: no YAML frontmatter found")
             continue
+
+        total += 1
 
         report = linkml_validate(
             frontmatter, str(SCHEMA_PATH), target_class="KnowledgeEntry"
@@ -91,7 +102,10 @@ def main() -> int:
         else:
             print(f"  OK {rel_path}")
 
-    print(f"\n{total} entries checked, {failed} failed")
+    summary = f"\n{total} entries checked, {failed} failed"
+    if skipped:
+        summary += f", {skipped} skipped"
+    print(summary)
     return 1 if failed > 0 else 0
 
 

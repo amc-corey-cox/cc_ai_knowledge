@@ -1,6 +1,6 @@
 RUN := uv run
 
-.PHONY: help validate validate-file
+.PHONY: help validate validate-file gen-json-schema
 
 help:
 	@echo "validate          Validate all knowledge entries against LinkML schema"
