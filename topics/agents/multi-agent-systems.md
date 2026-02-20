@@ -205,3 +205,6 @@ The bar for adding agents should be: "Does the task decompose into genuinely ind
 - [More Agents Is All You Need](https://arxiv.org/abs/2402.05120) - Scaling via ensemble [src-005]
 - [LLM Agent Architectures](agent-architectures.md) - Single-agent patterns
 - [Tool Use and Function Calling](tool-use-function-calling.md) - How agents interact with tools
+- [Sub-Agent Delegation](sub-agent-delegation.md) - Context isolation and orchestration patterns
+- [Human-in-the-Loop Patterns](human-in-the-loop.md) - Oversight in multi-agent workflows
+- [Autonomous Coding Agents](../agentic-coding/autonomous-coding-agents.md) - Multi-agent approaches in coding tools
