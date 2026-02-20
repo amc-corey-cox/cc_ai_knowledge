@@ -39,7 +39,7 @@ sources:
     accessed: 2026-02-19
     quotes:
       - text: "MCP defines three core primitives that servers can expose: Tools, Resources, and Prompts."
-        location: "Data Layer Protocol - Primitives"
+        location: "Architecture Overview"
 
 topics:
   - mcp
@@ -181,7 +181,7 @@ if __name__ == "__main__":
 
 **MCP Inspector** is an interactive debugging tool for connecting to a server, listing its capabilities, calling tools with custom arguments, and watching protocol messages. Use it before testing with a real AI client to catch schema errors, missing descriptions, and incorrect return types.
 
-**Testing with Claude Code**: add your server to `.mcp.json`, start a conversation, and observe whether the model discovers and uses tools correctly. This reveals problems the Inspector cannot catch -- ambiguous descriptions, missing context, or schema mismatches.
+**Testing with Claude Code**: add your server to `.mcp.json` (the MCP configuration file in your project root or `~/.claude/` directory that declares which servers to connect to), start a conversation, and observe whether the model discovers and uses tools correctly. This reveals problems the Inspector cannot catch -- ambiguous descriptions, missing context, or schema mismatches.
 
 **Unit testing**: both SDKs support programmatic testing. You can call tool handler functions directly, or use the in-memory client/server pairs to test the full protocol round-trip without real I/O:
 
@@ -220,11 +220,18 @@ Return errors as structured content rather than raising exceptions. The model ca
 @mcp.tool()
 async def query_database(sql: str) -> str:
     """Execute a read-only SQL query against the application database."""
-    if not sql.strip().upper().startswith("SELECT"):
-        return "Error: Only SELECT queries are allowed."
     try:
-        results = await db.execute(sql)
-        return json.dumps(results, default=str)
+        # Use a read-only database connection to enforce SELECT-only at the DB level.
+        # Never rely solely on string parsing -- use DB permissions as the primary guard.
+        async with db.read_only_connection() as conn:
+            results = await conn.execute(sql)
+            return json.dumps(results, default=str)
+    except PermissionError:
+        return json.dumps({
+            "error": "read_only_violation",
+            "message": "Only read-only queries are allowed.",
+            "suggestion": "Use SELECT statements; writes are not permitted"
+        })
     except Exception as e:
         return json.dumps({
             "error": "query_failed",
@@ -233,7 +240,7 @@ async def query_database(sql: str) -> str:
         })
 ```
 
-Including a `suggestion` field helps the model recover gracefully. The SDKs validate inputs against the schema before calling your handler, but always validate semantic constraints (like "SELECT only") in your code.
+Including a `suggestion` field helps the model recover gracefully. The SDKs validate inputs against the schema before calling your handler, but always enforce semantic constraints at the infrastructure level (read-only database connections, restricted filesystem permissions) rather than relying on string parsing, which is trivially bypassable.
 
 ## Deployment and Security
 
@@ -253,7 +260,7 @@ Security considerations are paramount because MCP servers give the model the abi
 
 - **Least privilege**: only expose capabilities the model actually needs
 - **Input sanitization**: treat tool inputs like user input in a web app -- they can be adversarial via prompt injection
-- **OAuth authentication**: MCP supports OAuth 2.0 for remote servers, with standard discovery, authorization, and token flows
+- **OAuth authentication**: MCP supports OAuth 2.1 for remote servers, with standard discovery, authorization, and token flows
 - **Audit logging**: log all tool invocations with arguments and results
 
 ## Practical Considerations

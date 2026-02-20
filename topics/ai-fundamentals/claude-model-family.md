@@ -125,6 +125,8 @@ Pricing follows the tiered structure (per million tokens):
 | Sonnet 4.6 | $3 | $15 |
 | Haiku 4.5 | $1 | $5 |
 
+These per-million-token rates apply regardless of context window size -- the 1M beta context does not change per-token pricing, only the maximum tokens per request.
+
 The 5x difference between Haiku and Opus output pricing makes tier selection economically significant at scale. A workflow that processes thousands of requests per day will see meaningful cost differences. Prompt caching and batching can further reduce effective costs across all tiers.
 
 ## Key Capabilities
@@ -230,7 +232,7 @@ Latency varies significantly across tiers and configurations:
 - **Sonnet**: Moderate latency. Acceptable for interactive use, noticeable for real-time streaming.
 - **Opus**: Highest latency, especially with extended thinking enabled. Best for background/batch tasks or situations where quality justifies the wait.
 
-When extended thinking is active, Opus may take significantly longer on complex prompts as it reasons through the problem. The thinking tokens are not billed at output rates but do add to wall-clock time.
+When extended thinking is active, Opus may take significantly longer on complex prompts as it reasons through the problem. Thinking tokens are billed as output tokens (for Claude 4+, you pay for the full thinking even though only a summary is returned), so extended thinking increases both cost and wall-clock time.
 
 ### Rate Limits and Throughput
 

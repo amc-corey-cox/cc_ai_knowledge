@@ -172,14 +172,17 @@ This means the visible token count in the response will not match the billed out
 
 ### Thinking Block Preservation Across Turns
 
-How thinking blocks persist across conversation turns also varies by model:
+There are two distinct scopes for thinking block behavior:
+
+- **Within a single assistant turn / tool-use loop**: All thinking tokens produced during that turn remain available to the model while it calls tools and generates its final reply. This is consistent across all models that support extended thinking.
+- **Across assistant turns in a conversation**: Some models discard thinking blocks from *previous* assistant turns before the next turn begins; others preserve them. The table below refers only to this cross-turn behavior.
 
 | Behavior | Models |
 |----------|--------|
-| Thinking blocks removed from prior turns | Claude Sonnet 3.7, Claude 4 through Opus 4.1, Sonnet 4.5 |
-| Thinking blocks preserved by default | Claude Opus 4.5, Claude Sonnet 4.6, Claude Opus 4.6 |
+| Thinking blocks removed from prior assistant turns | Claude Sonnet 3.7, Claude 4 through Opus 4.1, Sonnet 4.5 |
+| Thinking blocks preserved across assistant turns by default | Claude Opus 4.5, Claude Sonnet 4.6, Claude Opus 4.6 |
 
-Preservation in Opus 4.5+ means thinking blocks from earlier assistant turns stay in context, which enables better cache hits during tool-use loops and maintains richer conversational context. The tradeoff is that long conversations consume more context space since thinking blocks are retained.
+For models that preserve thinking blocks, prior-turn thinking content stays in context (often in summarized form), enabling better cache hits during multi-step tool-use workflows and maintaining richer conversational context. The tradeoff is that long conversations consume more context space.
 
 ## Controlling Reasoning Depth
 
@@ -313,16 +316,16 @@ Thinking tokens have a specific relationship with the context window that is imp
 - **Previous turns**: In models prior to Opus 4.5, thinking blocks from previous turns are stripped and do not count toward your context window. In Opus 4.5+, they are preserved by default.
 - **Strict enforcement**: Unlike older Claude models that silently adjusted limits, Claude 3.7+ enforces `max_tokens` strictly. If `prompt_tokens + max_tokens` exceeds the context window, the API returns an error rather than silently truncating.
 
-The effective context window calculation with thinking enabled:
+The effective context available for new output depends on model behavior:
+
+For models that **strip** prior-turn thinking (Sonnet 3.7, Claude 4 through Opus 4.1, Sonnet 4.5), thinking tokens from previous turns do not count against the context window -- they are removed before the next turn.
+
+For models that **preserve** prior-turn thinking (Opus 4.5+), those thinking tokens remain in context and count against the window like any other input tokens.
+
+Within a single tool-use loop, thinking tokens from the current turn always remain in context:
 
 ```
-context_window = (input_tokens - previous_thinking_tokens) + max_tokens
-```
-
-With tool use, thinking tokens from the current tool-use loop remain in context:
-
-```
-context_window = (input_tokens + current_turn_thinking_tokens + tool_tokens) + max_tokens
+effective_output_budget = context_window - input_tokens - current_turn_thinking_tokens - tool_result_tokens
 ```
 
 ### Practical Impact

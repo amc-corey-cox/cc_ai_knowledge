@@ -37,7 +37,7 @@ sources:
       - text: "MCP focuses solely on the protocol for context exchange—it does not dictate how AI applications use LLMs or manage the provided context."
         location: "Scope"
       - text: "MCP defines three core primitives that servers can expose: Tools, Resources, and Prompts."
-        location: "Data Layer Protocol - Primitives"
+        location: "Architecture Overview"
 
 topics:
   - mcp
@@ -170,7 +170,7 @@ The transport layer defines how JSON-RPC messages are physically transmitted bet
 
 **stdio** -- For local servers running as child processes. The host spawns the server process and communicates over stdin/stdout. This is the simplest and most common transport for local tool servers. There is no network overhead, no authentication complexity, and the server lifecycle is tied to the host. Most MCP servers used with desktop applications (like Claude Desktop or Claude Code) use stdio transport.
 
-**Streamable HTTP** -- For remote servers accessible over the network. The client connects to an HTTP endpoint. The server can use Server-Sent Events (SSE) to stream responses back to the client. This transport supports remote deployment, multi-tenant servers, and integration with existing HTTP infrastructure (load balancers, API gateways, authentication proxies). Streamable HTTP replaced the earlier SSE-only transport in the 2025-03-26 revision of the specification.
+**Streamable HTTP** -- For remote servers accessible over the network. The client connects to an HTTP endpoint. The server can use Server-Sent Events (SSE) to stream responses back to the client. This transport supports remote deployment, multi-tenant servers, and integration with existing HTTP infrastructure (load balancers, API gateways, authentication proxies). As of the current specification (2025-03-26), Streamable HTTP is the standard network transport, replacing an earlier SSE-only transport from prior revisions.
 
 The choice of transport is transparent to the higher protocol layers. A tool call works the same way regardless of whether the server is a local process or a remote service -- only the connection setup differs.
 
