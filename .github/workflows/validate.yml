@@ -1,0 +1,53 @@
+name: Validate Knowledge Base
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Schema & Term Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Validate schema
+        run: uv run python scripts/validate.py
+
+      - name: Validate topic terms
+        run: uv run python scripts/validate_terms.py
+
+  check-ontology-versions:
+    name: Check Ontology Versions
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Check ontology versions
+        run: uv run python scripts/check_ontology_versions.py
+        env:
+          GH_TOKEN: ${{ github.token }}
