@@ -115,7 +115,7 @@ Inspired by dismech's validation approach:
 - PDFs downloadable
 - API endpoints responsive
 
-### Level 3: Quote Verification (Stretch Goal)
+### Level 3: Quote Verification
 - Fetch source content
 - Search for quoted text
 - Flag if quote not found verbatim
@@ -144,9 +144,17 @@ ai_metadata:
 ```
 
 ### Verification Requirement
-AI-generated content MUST be marked `ai_unverified` until:
-- Human reviews and approves, OR
-- Automated verification passes (quote check, source check)
+AI-generated content MUST be marked `ai_unverified` until automated verification passes. The verification pipeline runs in order:
+
+1. **Schema validation** — frontmatter conforms to LinkML schema
+2. **Source accessibility** — URLs return 200 or have archive.org fallback
+3. **Quote verification** — quoted text found in source content
+4. **Claims cross-check** — no contradictions with existing verified articles
+
+Content that passes all automated checks is promoted to `ai_generated` with `verified_by: automated`. Human review is required only when:
+- Automated checks flag a conflict or failure
+- Content makes extraordinary claims (low confidence scores)
+- Cross-article contradictions are detected
 
 ### Quarantine Zone
 Unverified AI content lives in `knowledge/pending/` until verified, then moves to main knowledge base.
@@ -181,25 +189,31 @@ knowledge/
 
 ## Implementation Phases
 
-### Phase 1: Manual + Conventions
+### Phase 1: Manual + Conventions — COMPLETE
 - YAML frontmatter schema (documented, not enforced)
 - Human authors follow conventions
 - Git history provides basic provenance
 
-### Phase 2: Schema Validation
-- JSON Schema or LinkML for entry validation
-- Pre-commit hook to validate new entries
-- CI check for schema compliance
+### Phase 2: Schema Validation — COMPLETE
+- LinkML schema at `schema/knowledge-entry.yaml`
+- `scripts/validate.py` validates frontmatter against schema
+- `scripts/validate_terms.py` validates topic terms against AIO ontology
+- Makefile targets: `validate`, `validate-all`, `validate-terms`
+- CI workflow for automated validation on push/PR
 
-### Phase 3: Automated Verification
-- URL checking (accessibility)
-- Quote verification (where possible)
-- Staleness alerts
+### Phase 3: Automated Verification — IN PROGRESS
+- **Quote verification**: Fetch source content and verify quoted text appears verbatim (issue #8)
+- **Claims cross-check**: Detect contradictions between articles via structured claim extraction
+- **Trust decay**: Time-based confidence degradation with configurable decay rates per curation type
+- **Source accessibility**: URL checking with archive.org fallback
+- **CI integration**: Add verification checks to GitHub Actions workflow
 
-### Phase 4: Agent Integration
-- Agents can add to `pending/`
-- Verification pipeline for promotion
-- RAG retrieval respects trust tiers
+### Phase 4: cc_forge RAG Integration
+- Knowledge base serves as RAG source for cc_forge coding assistant
+- RAG retrieval respects trust tiers and verification status
+- Agents can add content to `pending/` via structured API
+- Automated verification pipeline for promotion from `pending/` to `topics/`
+- Feedback loop: cc_forge usage informs content gaps and staleness
 
 ---
 
@@ -233,10 +247,10 @@ The key insight: **Git provides an immutable history**, and **YAML frontmatter p
 
 ## Open Questions
 
-1. **Controlled vocabularies**: Should topics be free-form or from a defined list?
+1. **Controlled vocabularies**: ~~Should topics be free-form or from a defined list?~~ **RESOLVED** — Hybrid approach: AIO ontology terms validated via OAK + local enum extensions in the LinkML schema. See `scripts/validate_terms.py`.
 2. **Archive strategy**: Cache sources locally, use archive.org, or trust URLs?
-3. **Quote verification**: How aggressive? PubMed-style exact match or fuzzy?
-4. **Trust decay**: Should old unverified content be auto-demoted?
+3. **Quote verification** (**HIGH PRIORITY**): How aggressive? PubMed-style exact match or fuzzy? Blocking the automated verification pipeline.
+4. **Trust decay** (**HIGH PRIORITY**): Should old unverified content be auto-demoted? Proposed: time-based confidence degradation with different decay rates per curation type.
 
 ---
 
