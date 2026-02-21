@@ -20,7 +20,7 @@ This repo follows an **automated-first verification** approach: AI writes conten
 
 The pipeline:
 1. **Schema validation** — frontmatter conforms to LinkML schema (`make validate-all`)
-2. **Term validation** — topic terms exist in the AIO ontology (`make validate-terms`)
+2. **Term validation** — schema `meaning:` CURIEs resolve against AIO (`make validate-terms`)
 3. **Quote verification** — quoted text found in source content (planned)
 4. **Claims cross-check** — no contradictions with existing articles (planned)
 

@@ -49,3 +49,5 @@ jobs:
 
       - name: Check ontology versions
         run: uv run python scripts/check_ontology_versions.py
+        env:
+          GH_TOKEN: ${{ github.token }}
