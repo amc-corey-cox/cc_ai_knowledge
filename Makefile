@@ -2,7 +2,7 @@ RUN := uv run
 SCHEMA := schema/knowledge-entry.yaml
 OAK_CONF := conf/oak_config.yaml
 
-.PHONY: help validate validate-terms validate-all validate-file gen-json-schema check-ontology-versions
+.PHONY: help validate validate-terms validate-all validate-file gen-json-schema check-ontology-versions docs docs-serve
 
 help:
 	@echo "validate          Validate all entries against LinkML schema (structure)"
@@ -11,6 +11,8 @@ help:
 	@echo "validate-file F=  Validate a specific file (structure only)"
 	@echo "gen-json-schema   Generate JSON Schema from LinkML (for editor support)"
 	@echo "check-ontology-versions  Check if local ontology files are up to date"
+	@echo "docs              Build documentation site"
+	@echo "docs-serve        Serve documentation site locally"
 
 validate:
 	$(RUN) python scripts/validate.py
@@ -28,3 +30,9 @@ gen-json-schema:
 
 check-ontology-versions:
 	$(RUN) python scripts/check_ontology_versions.py
+
+docs:
+	$(RUN) mkdocs build --strict
+
+docs-serve:
+	$(RUN) mkdocs serve
