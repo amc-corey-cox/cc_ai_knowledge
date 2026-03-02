@@ -1,0 +1,88 @@
+id: path-ai-for-developers
+title: AI for Developers
+description: >
+  A structured path through the knowledge base for experienced developers
+  who use AI daily but want to build stronger fundamentals. Starts with
+  how LLMs work, progresses through models, prompting, and agents, and
+  ends with practical agentic coding workflows.
+
+audience: Experienced developer, 1+ year AI usage, no formal ML background
+
+modules:
+  - id: how-llms-work
+    title: How LLMs Actually Work
+    description: Just enough theory to build intuition about what models can and can't do.
+    articles:
+      - path: topics/transformers/transformer-architecture.md
+        required: true
+      - path: topics/transformers/attention-mechanism.md
+        required: true
+      - path: topics/transformers/modern-variants.md
+        required: false
+
+  - id: models-you-use
+    title: The Models You Use
+    description: Understand the models you interact with daily — capabilities, tradeoffs, and how reasoning works.
+    articles:
+      - path: topics/ai-fundamentals/claude-model-family.md
+        required: true
+      - path: topics/ai-fundamentals/extended-thinking-reasoning.md
+        required: true
+
+  - id: talking-to-models
+    title: Talking to Models Effectively
+    description: Turn intuition about models into better prompts for code generation.
+    articles:
+      - path: topics/ai-fundamentals/prompt-engineering-code.md
+        required: true
+
+  - id: how-agents-work
+    title: How AI Agents Work
+    description: The patterns behind tools like Claude Code — from simple tool use to multi-agent orchestration.
+    articles:
+      - path: topics/agents/agent-architectures.md
+        required: true
+      - path: topics/agents/tool-use-function-calling.md
+        required: true
+      - path: topics/agents/human-in-the-loop.md
+        required: false
+      - path: topics/agents/multi-agent-systems.md
+        required: false
+      - path: topics/agents/sub-agent-delegation.md
+        required: false
+
+  - id: agentic-coding
+    title: Agentic Coding in Practice
+    description: How Claude Code and similar tools work, and how to use them effectively.
+    articles:
+      - path: topics/agentic-coding/claude-code-architecture.md
+        required: true
+      - path: topics/agentic-coding/agentic-coding-patterns.md
+        required: true
+      - path: topics/agentic-coding/claude-md-agent-configuration.md
+        required: true
+      - path: topics/agentic-coding/context-window-management.md
+        required: true
+      - path: topics/agentic-coding/autonomous-coding-agents.md
+        required: false
+
+  - id: extending-with-mcp
+    title: Extending Capabilities with MCP
+    description: How the Model Context Protocol lets you give agents access to your tools and data.
+    articles:
+      - path: topics/protocols/model-context-protocol.md
+        required: true
+      - path: topics/protocols/mcp-server-development.md
+        required: true
+
+  - id: running-locally
+    title: Running Models Locally
+    description: Optional deep dive into self-hosting models — quantization, engines, and hardware.
+    optional: true
+    articles:
+      - path: topics/local-inference/quantization-methods.md
+        required: true
+      - path: topics/local-inference/inference-engines.md
+        required: true
+      - path: topics/local-inference/hardware-and-optimization.md
+        required: true

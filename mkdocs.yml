@@ -1,0 +1,79 @@
+site_name: CC AI Knowledge
+site_description: Curated knowledge base for AI/ML concepts with provenance tracking
+repo_url: https://github.com/amc-corey-cox/cc_ai_knowledge
+repo_name: amc-corey-cox/cc_ai_knowledge
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    - scheme: default
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - content.code.copy
+    - toc.follow
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - toc:
+      permalink: true
+  - tables
+  - attr_list
+  - md_in_html
+  - meta
+
+nav:
+  - Home: index.md
+  - Learning Paths:
+    - Overview: learning-paths/index.md
+    - AI for Developers: learning-paths/ai-for-developers.md
+  - Topics:
+    - Transformers:
+      - Architecture Overview: topics/transformers/transformer-architecture.md
+      - Attention Mechanism: topics/transformers/attention-mechanism.md
+      - Modern Variants: topics/transformers/modern-variants.md
+    - AI Fundamentals:
+      - Claude Model Family: topics/ai-fundamentals/claude-model-family.md
+      - Extended Thinking & Reasoning: topics/ai-fundamentals/extended-thinking-reasoning.md
+      - Prompt Engineering for Code: topics/ai-fundamentals/prompt-engineering-code.md
+      - AI Model Ontologies: topics/ai-fundamentals/ai-model-ontologies.md
+      - C2PA Content Provenance: topics/ai-fundamentals/c2pa-content-provenance.md
+    - Agents:
+      - Agent Architectures: topics/agents/agent-architectures.md
+      - Tool Use & Function Calling: topics/agents/tool-use-function-calling.md
+      - Human-in-the-Loop: topics/agents/human-in-the-loop.md
+      - Multi-Agent Systems: topics/agents/multi-agent-systems.md
+      - Sub-Agent Delegation: topics/agents/sub-agent-delegation.md
+    - Agentic Coding:
+      - Claude Code Architecture: topics/agentic-coding/claude-code-architecture.md
+      - Agentic Coding Patterns: topics/agentic-coding/agentic-coding-patterns.md
+      - CLAUDE.md Configuration: topics/agentic-coding/claude-md-agent-configuration.md
+      - Context Window Management: topics/agentic-coding/context-window-management.md
+      - Autonomous Coding Agents: topics/agentic-coding/autonomous-coding-agents.md
+    - Protocols:
+      - Model Context Protocol: topics/protocols/model-context-protocol.md
+      - Building MCP Servers: topics/protocols/mcp-server-development.md
+    - Local Inference:
+      - Quantization Methods: topics/local-inference/quantization-methods.md
+      - Inference Engines: topics/local-inference/inference-engines.md
+      - Hardware & Optimization: topics/local-inference/hardware-and-optimization.md
+  - Reference:
+    - Provenance Design: reference/provenance.md
+  - About: about.md
